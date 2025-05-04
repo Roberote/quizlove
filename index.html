@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ DO NOSSO AMOR ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap');
+        
+        :root {
+            --rosa: #ff4d6d;
+            --rosa-claro: #ff8fa3;
+            --roxo: #c77dff;
+            --bg: #fff0f3;
+            --destaque: #ffccd5;
+            --certo: #4caf50;
+            --errado: #ff8a80;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg);
+            color: #5a1a3a;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, var(--destaque) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, var(--rosa-claro) 0%, transparent 20%);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(214, 51, 108, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                linear-gradient(45deg, transparent 65%, var(--rosa) 65%),
+                linear-gradient(-45deg, transparent 65%, var(--roxo) 65%);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: bgMove 30s linear infinite;
+        }
+        
+        @keyframes bgMove {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-family: 'Pacifico', cursive;
+            text-align: center;
+            color: var(--rosa);
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .question {
+            background: linear-gradient(135deg, #fff 0%, #ffeef1 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid #ffd6e0;
+            transition: transform 0.3s;
+        }
+        
+        .question:hover {
+            transform: translateY(-5px);
+        }
+        
+        .question h2 {
+            color: var(--rosa);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ffb3c6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            background: #ffebf1;
+            border-color: var(--rosa);
+        }
+        
+        .option.selected {
+            background: var(--rosa);
+            color: white;
+            border-color: var(--rosa);
+        }
+        
+        .option.correct {
+            background: var(--certo);
+            color: white;
+            border-color: var(--certo);
+        }
+        
+        .option.wrong {
+            background: var(--errado);
+            color: white;
+            border-color: var(--errado);
+        }
+        
+        button {
+            background: linear-gradient(45deg, var(--rosa), var(--roxo));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(214, 51, 108, 0.4);
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(214, 51, 108, 0.6);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result {
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .vale {
+            max-width: 350px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: rotate(-5deg);
+            animation: float 3s ease-in-out infinite;
+            border: 8px solid white;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(-5deg) translateY(-10px); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--rosa);
+            opacity: 0;
+        }
+        
+        .print-hint {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid var(--rosa);
+            font-weight: bold;
+        }
+        
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: var(--rosa);
+            animation: heartFloat 4s linear forwards;
+            opacity: 0;
+        }
+        
+        @keyframes heartFloat {
+            0% { 
+                transform: translateY(0) rotate(0deg);
+                opacity: 0; 
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <h1>Quiz do Nosso Amor ❤️</h1>
+        <p class="intro">Responda essas perguntinhas sobre a gente e ganhe um prêmio especial!</p>
+        
+        <div class="quiz-container" id="quiz">
+            <!-- Perguntas serão inseridas aqui pelo JavaScript -->
+        </div>
+        
+        <button id="submit" disabled>Próxima Pergunta</button>
+        
+        <div class="result" id="result">
+            <h2>Parabéns, meu amor! 🎉</h2>
+            <p>Você acertou <span id="score">0</span> de 5 perguntas!</p>
+            <p>Aqui está seu prêmio especial:</p>
+            
+            <img src="https://i.imgur.com/JQ9wW1x.png" alt="Vale Milkshake" class="vale" id="vale">
+            
+            <div class="print-hint">
+                💡 Dica: Pressione "Print Screen" ou "Ctrl+P" para salvar seu vale!
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 1.2rem;">
+                Te amo mais que todas as respostas certas desse quiz! ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // PERGUNTAS PERSONALIZADAS (como você pediu)
+        const quiz = [
+            {
+                question: "Sobre o que foi nossa primeira conversa?",
+                options: [
+                    "Sobre música",
+                    "Sobre boliche",
+                    "Sobre filmes",
+                    "Sobre comida"
+                ],
+                answer: 1
+            },
+            {
+                question: "O que a gente viu entre os episódios de 'Natal Macabro RPG'?",
+                options: [
+                    "Round 6",
+                    "Stranger Things",
+                    "Maethe Chef",
+                    "The Witcher"
+                ],
+                answer: 2
+            },
+            {
+                question: "Qual foi o primeiro presentinho que eu te dei?",
+                options: [
+                    "Uma pulseira",
+                    "Um chaveiro",
+                    "Um pelúcia",
+                    "Um livro"
+                ],
+                answer: 1
+            },
+            {
+                question: "Qual flor eu te entreguei no dia que pedi em namoro?",
+                options: [
+                    "Rosa vermelha",
+                    "Tulipa amarela",
+                    "Lírio laranja",
+                    "Girassol"
+                ],
+                answer: 2
+            },
+            {
+                question: "Qual o apelido que eu mais te chamo?",
+                options: [
+                    "Amor",
+                    "Linda",
+                    "Princesa",
+                    "Nenê"
+                ],
+                answer: 2
+            }
+        ];
+        
+        // Variáveis globais
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        
+        // Elementos DOM
+        const quizContainer = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit');
+        const resultContainer = document.getElementById('result');
+        const scoreElement = document.getElementById('score');
+        const heartsContainer = document.getElementById('hearts');
+        
+        // Inicializar quiz
+        function initQuiz() {
+            showQuestion();
+            
+            submitButton.addEventListener('click', () => {
+                if (selectedOption !== null) {
+                    checkAnswer();
+                    
+                    if (currentQuestion < quiz.length - 1) {
+                        currentQuestion++;
+                        selectedOption = null;
+                        setTimeout(showQuestion, 1000); // Delay para ver o feedback
+                    } else {
+                        setTimeout(showResult, 1000);
+                    }
+                }
+            });
+        }
+        
+        // Mostrar pergunta atual
+        function showQuestion() {
+            submitButton.disabled = true;
+            submitButton.textContent = currentQuestion < quiz.length - 1 ? "Próxima Pergunta" : "Ver Resultado";
+            quizContainer.innerHTML = '';
+            
+            const question = quiz[currentQuestion];
+            
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `
+                <h2>${currentQuestion + 1}. ${question.question}</h2>
+                <div class="options" id="options"></div>
+            `;
+            
+            quizContainer.appendChild(questionElement);
+            
+            const optionsContainer = document.getElementById('options');
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                
+                optionElement.addEventListener('click', () => {
+                    if (document.querySelector('.option.correct')) return; // Impede mudar resposta após feedback
+                    
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    optionElement.classList.add('selected');
+                    selectedOption = index;
+                    submitButton.disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+        
+        // Verificar resposta
+        function checkAnswer() {
+            const options = document.querySelectorAll('.option');
+            const correctIndex = quiz[currentQuestion].answer;
+            
+            // Mostrar feedback visual
+            options.forEach((option, index) => {
+                if (index === correctIndex) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && selectedOption !== correctIndex) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            if (selectedOption === correctIndex) {
+                score++;
+                createHearts();
+            }
+            
+            submitButton.disabled = true;
+        }
+        
+        // Mostrar resultado final
+        function showResult() {
+            quizContainer.style.display = 'none';
+            submitButton.style.display = 'none';
+            resultContainer.style.display = 'flex';
+            scoreElement.textContent = score;
+            
+            // Efeito de confete
+            createConfetti();
+        }
+        
+        // Criar corações flutuantes
+        function createHearts() {
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.animationDelay = `${Math.random() * 0.5}s`;
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }
+        }
+        
+        // Criar efeito de confete
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `${Math.random() * 100}%`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(confetti);
+                
+                // Animação
+                const animationDuration = Math.random() * 3 + 2;
+                confetti.style.animation = `fadeIn 0.5s ease-out, confettiFall ${animationDuration}s linear forwards`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                
+                // Remover após animação
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+            
+            // Adicionar estilo para animação de confete
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes confettiFall {
+                    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+                    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Gerar cor aleatória
+        function getRandomColor() {
+            const colors = ['#ff4d6d', '#ff8fa3', '#c77dff', '#b5179e', '#7209b7'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Iniciar o quiz quando a página carregar
+        window.addEventListener('load', initQuiz);
+    </script>
+</body>
+</html>
